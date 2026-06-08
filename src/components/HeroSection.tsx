@@ -60,7 +60,7 @@ export default function HeroSection() {
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
-            <PulseButton href="https://wa.me/5544988266741?text=Ol%C3%A1!%20Sou%20lojista%20e%20tenho%20interesse%20em%20saber%20mais%20sobre%20seu%20cat%C3%A1logo!">
+            <PulseButton href="https://wa.me/5544997030397?text=Ol%C3%A1!%20Sou%20lojista%20e%20tenho%20interesse%20em%20saber%20mais%20sobre%20seu%20cat%C3%A1logo!">
               <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>chat</span>
               Solicitar catálogo
             </PulseButton>

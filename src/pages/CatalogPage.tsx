@@ -156,7 +156,7 @@ export default function CatalogPage() {
                     ))}
                   </ul>
                   <motion.a
-                    href="https://wa.me/5544988266741"
+                    href="https://wa.me/5544997030397"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.03, y: -2 }}

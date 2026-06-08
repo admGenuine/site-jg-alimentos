@@ -62,7 +62,7 @@ export default function Footer() {
             <p className="text-xs font-bold uppercase tracking-widest text-inverse-on-surface/40 mb-5">Contato</p>
             <ul className="list-none m-0 p-0 flex flex-col gap-3">
               {[
-                { icon: 'chat', text: 'WhatsApp: (44) 98826-6741' },
+                { icon: 'chat', text: 'WhatsApp: (44) 99703-0397' },
                 { icon: 'mail', text: 'contato@jgalimentos.com.br' },
                 { icon: 'location_on', text: 'Maringá - PR' },
               ].map((item) => (

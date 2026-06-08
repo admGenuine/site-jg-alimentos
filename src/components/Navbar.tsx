@@ -110,7 +110,7 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <motion.a
-          href="https://wa.me/5544988266741?text=Ol%C3%A1%21%20Sou%20lojista%20e%20tenho%20interesse%20em%20saber%20mais%20sobre%20seu%20cat%C3%A1logo%21"
+          href="https://wa.me/5544997030397?text=Ol%C3%A1%21%20Sou%20lojista%20e%20tenho%20interesse%20em%20saber%20mais%20sobre%20seu%20cat%C3%A1logo%21"
           target="_blank"
           rel="noopener noreferrer"
           variants={itemVariants}
@@ -128,7 +128,7 @@ export default function Navbar() {
         {/* Mobile: ícone WhatsApp + botão hamburger */}
         <div className="flex items-center gap-2 ml-auto md:hidden">
           <motion.a
-            href="https://wa.me/5544988266741?text=Ol%C3%A1%21%20Sou%20lojista%20e%20tenho%20interesse%20em%20saber%20mais%20sobre%20seu%20cat%C3%A1logo%21"
+            href="https://wa.me/5544997030397?text=Ol%C3%A1%21%20Sou%20lojista%20e%20tenho%20interesse%20em%20saber%20mais%20sobre%20seu%20cat%C3%A1logo%21"
             target="_blank"
             rel="noopener noreferrer"
             whileTap={{ scale: 0.95 }}

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
 const WA_HREF =
-  'https://wa.me/5544988266741?text=Ol%C3%A1!%20Sou%20lojista%20e%20tenho%20interesse%20em%20saber%20mais%20sobre%20seu%20cat%C3%A1logo!'
+  'https://wa.me/5544997030397?text=Ol%C3%A1!%20Sou%20lojista%20e%20tenho%20interesse%20em%20saber%20mais%20sobre%20seu%20cat%C3%A1logo!'
 
 export default function WhatsAppButton() {
   return (
