@@ -26,7 +26,7 @@ export default function Hero() {
   )
 
   return (
-    <section className="relative h-[100svh] min-h-[660px] overflow-hidden bg-[#3f86d8]" aria-label="Apresentação">
+    <section className="relative h-[100svh] min-h-[620px] overflow-hidden bg-ink md:min-h-[660px] md:bg-[#3f86d8]" aria-label="Apresentação">
       <motion.img
         src="/img/fachada-jg.webp"
         alt="Fachada do estoque da JG Alimentos em Maringá, com céu azul"
@@ -34,7 +34,7 @@ export default function Hero() {
         height={1086}
         fetchPriority="high"
         decoding="async"
-        className="absolute inset-x-0 top-0 h-[72%] w-full object-cover object-[46%_38%] md:h-[112%]"
+        className="absolute inset-x-0 top-0 h-[64%] w-full object-cover object-[46%_38%] [mask-image:linear-gradient(to_bottom,black_62%,transparent)] md:h-[112%] md:[mask-image:none]"
         style={reduce ? undefined : { y: imgY }}
         initial={reduce ? false : { scale: 1.08 }}
         animate={{ scale: 1 }}
@@ -55,14 +55,14 @@ export default function Hero() {
 
       <div className="absolute inset-x-0 bottom-0">
         <div className="container-site pb-10 md:pb-16">
-            <h1 className="text-[clamp(44px,7.2vw,88px)] font-bold leading-[0.98] tracking-display">
+            <h1 className="text-[clamp(40px,7.2vw,88px)] font-bold leading-[0.98] tracking-display">
               {line('Naturais no atacado,', 0.25)}
               {line('direto para o seu CNPJ.', 0.37)}
             </h1>
           <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-[560px]">
             <motion.p
-              className="mt-6 max-w-[520px] text-[16px] leading-[1.6] text-cream/85 md:text-[18px]"
+              className="mt-5 max-w-[520px] text-[15px] leading-[1.6] text-cream/85 sm:text-[16px] md:mt-6 md:text-[18px]"
               initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: EASE, delay: 0.6 }}
@@ -71,7 +71,7 @@ export default function Hero() {
               distribuidores. Mais de 300 itens com preço de atacado.
             </motion.p>
             <motion.div
-              className="mt-8 flex flex-wrap gap-2 sm:gap-3"
+              className="mt-7 flex flex-wrap gap-2 sm:gap-3 md:mt-8"
               initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: EASE, delay: 0.75 }}
