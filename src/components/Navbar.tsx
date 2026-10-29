@@ -1,195 +1,151 @@
-import { useState, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence, type Variants } from 'framer-motion'
-import Logo from './Logo'
+import { useEffect, useState } from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
+import PillButton from './PillButton'
+import { LogoLink, WhatsAppGlyph } from './ui'
+import { WHATSAPP_DISPLAY, waLink, trackConversion } from '../lib/site'
 
 const links = [
   { label: 'Início', to: '/' },
   { label: 'Catálogo', to: '/catalogo' },
-  { label: 'Sobre Nós', to: '/sobre' },
+  { label: 'Como comprar', to: '/#como-comprar' },
+  { label: 'Sobre a JG', to: '/sobre' },
 ]
-
-const getActiveFromPath = (p: string) => {
-  if (p === '/catalogo') return 'Catálogo'
-  if (p === '/sobre') return 'Sobre Nós'
-  return 'Início'
-}
-
-const navVariants: Variants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
-}
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: -8 },
-  visible: { opacity: 1, y: 0 },
-}
 
 export default function Navbar() {
   const location = useLocation()
-  const navigate = useNavigate()
-  const [active, setActive] = useState(() => getActiveFromPath(location.pathname))
   const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
+  // o menu fica aberto só na página em que foi aberto: trocar de rota fecha sozinho
+  const here = location.pathname + location.hash
+  const [openAt, setOpenAt] = useState<string | null>(null)
+  const open = openAt === here
+  const setOpen = (v: boolean | ((o: boolean) => boolean)) => {
+    const next = typeof v === 'function' ? v(open) : v
+    setOpenAt(next ? here : null)
+  }
 
   useEffect(() => {
-    setActive(getActiveFromPath(location.pathname))
-  }, [location.pathname])
-
-  useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 20)
-      if (window.scrollY > 80) setMenuOpen(false)
-    }
-    window.addEventListener('scroll', onScroll)
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const handleNav = (label: string, to: string) => {
-    setActive(label)
-    setMenuOpen(false)
-    navigate(to)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+  // trava a rolagem e permite fechar com Esc
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpenAt(null)
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const isActive = (to: string) => (to.includes('#') ? false : to === '/' ? location.pathname === '/' : location.pathname.startsWith(to))
 
   return (
-    <motion.nav
-      variants={navVariants}
-      initial="hidden"
-      animate="visible"
-      className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 ${
-        scrolled ? 'shadow-md' : ''
-      } bg-surface/80 backdrop-blur-md`}
-    >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 md:h-20 lg:h-24 flex items-center relative">
-        {/* Logo */}
-        <motion.div
-          className="cursor-pointer flex-shrink-0"
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.97 }}
-          onClick={() => handleNav('Início', '/')}
-        >
-          <span className="md:hidden"><Logo size={56} /></span>
-          <span className="hidden md:block"><Logo size={80} /></span>
-        </motion.div>
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300 ${
+          scrolled || open ? 'border-b border-line/70 bg-ink/85 backdrop-blur-md' : 'border-b border-transparent bg-transparent'
+        }`}
+      >
+        <nav className="container-site flex h-[72px] items-center justify-between md:h-[84px]" aria-label="Principal">
+          <LogoLink size={44} onClick={() => setOpen(false)} />
 
-        {/* Desktop nav links */}
-        <motion.ul
-          variants={{ visible: { transition: { staggerChildren: 0.07, delayChildren: 0.2 } } }}
-          initial="hidden"
-          animate="visible"
-          className="hidden md:flex items-center gap-1 list-none m-0 p-0 absolute left-1/2 -translate-x-1/2"
-        >
-          {links.map((link) => {
-            const isActive = active === link.label
-            return (
-              <motion.li
-                key={link.label}
-                variants={itemVariants}
-                className="relative px-4 py-2 cursor-pointer"
-                onClick={() => handleNav(link.label, link.to)}
-              >
-                {isActive && (
-                  <motion.span
-                    layoutId="navbar-pill"
-                    className="absolute inset-0 bg-primary/10 rounded-full"
-                    transition={{ type: 'spring', stiffness: 380, damping: 34 }}
-                  />
-                )}
-                <span
-                  className={`relative text-sm font-medium transition-colors duration-200 pointer-events-none ${
-                    isActive ? 'text-primary' : 'text-on-surface/70'
+          <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex">
+            {links.map((l) => (
+              <li key={l.label}>
+                <NavLink
+                  to={l.to}
+                  className={`text-[14px] font-medium transition-opacity duration-200 hover:opacity-100 ${
+                    isActive(l.to) ? 'opacity-100' : 'opacity-75'
                   }`}
                 >
-                  {link.label}
-                </span>
-              </motion.li>
-            )
-          })}
-        </motion.ul>
+                  {l.label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
 
-        {/* Desktop CTA */}
-        <motion.a
-          href="https://wa.me/5544997030397?text=Ol%C3%A1%21%20Sou%20lojista%20e%20tenho%20interesse%20em%20saber%20mais%20sobre%20seu%20cat%C3%A1logo%21"
-          target="_blank"
-          rel="noopener noreferrer"
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          whileHover={{ scale: 1.05, y: -1 }}
-          whileTap={{ scale: 0.97 }}
-          className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold text-white no-underline ml-auto"
-          style={{ background: 'linear-gradient(135deg, #4F74AD, #7A9FD4)' }}
-        >
-          <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>chat</span>
-          Fale conosco
-        </motion.a>
-
-        {/* Mobile: ícone WhatsApp + botão hamburger */}
-        <div className="flex items-center gap-2 ml-auto md:hidden">
-          <motion.a
-            href="https://wa.me/5544997030397?text=Ol%C3%A1%21%20Sou%20lojista%20e%20tenho%20interesse%20em%20saber%20mais%20sobre%20seu%20cat%C3%A1logo%21"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center justify-center w-10 h-10 rounded-full text-white"
-            style={{ background: 'linear-gradient(135deg, #4F74AD, #7A9FD4)' }}
-            aria-label="Fale conosco no WhatsApp"
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>chat</span>
-          </motion.a>
-
-          <button
-            onClick={() => setMenuOpen((o) => !o)}
-            className="flex items-center justify-center w-10 h-10 rounded-xl text-on-surface/70"
-            aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
-          >
-            <motion.span
-              key={menuOpen ? 'close' : 'menu'}
-              initial={{ opacity: 0, rotate: -90 }}
-              animate={{ opacity: 1, rotate: 0 }}
-              transition={{ duration: 0.18 }}
-              className="material-symbols-outlined"
-              style={{ fontSize: '24px' }}
+          <div className="flex items-center gap-2">
+            <PillButton href={waLink()} whatsapp variant="cream" className="hidden !h-11 md:inline-flex">
+              Pedir tabela de preços
+            </PillButton>
+            <button
+              type="button"
+              onClick={() => setOpen((o) => !o)}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-cream/25 md:hidden"
+              aria-label={open ? 'Fechar menu' : 'Abrir menu'}
+              aria-expanded={open}
+              aria-controls="menu-mobile"
             >
-              {menuOpen ? 'close' : 'menu'}
-            </motion.span>
-          </button>
-        </div>
-      </div>
+              <span className="relative block h-3 w-5">
+                <span
+                  className={`absolute left-0 top-0 h-[2px] w-5 rounded bg-cream transition-transform duration-300 ${
+                    open ? 'translate-y-[5px] rotate-45' : ''
+                  }`}
+                />
+                <span
+                  className={`absolute bottom-0 left-0 h-[2px] w-5 rounded bg-cream transition-transform duration-300 ${
+                    open ? '-translate-y-[5px] -rotate-45' : ''
+                  }`}
+                />
+              </span>
+            </button>
+          </div>
+        </nav>
+      </header>
 
-      {/* Mobile dropdown */}
       <AnimatePresence>
-        {menuOpen && (
+        {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="md:hidden overflow-hidden bg-surface/95 backdrop-blur-md border-t border-outline/10"
+            id="menu-mobile"
+            className="fixed inset-0 z-40 flex flex-col bg-ink px-5 pb-8 pt-[96px] md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
           >
-            <ul className="list-none m-0 p-0 px-4 py-3 flex flex-col gap-1">
-              {links.map((link) => {
-                const isActive = active === link.label
-                return (
-                  <li key={link.label}>
-                    <button
-                      onClick={() => handleNav(link.label, link.to)}
-                      className={`w-full text-left px-4 py-3.5 rounded-xl text-sm font-medium transition-colors ${
-                        isActive
-                          ? 'bg-primary/10 text-primary'
-                          : 'text-on-surface/70 hover:bg-surface-container'
-                      }`}
-                    >
-                      {link.label}
-                    </button>
-                  </li>
-                )
-              })}
+            <ul className="flex flex-col gap-1">
+              {links.map((l, i) => (
+                <motion.li
+                  key={l.label}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.05 + i * 0.05, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <NavLink
+                    to={l.to}
+                    onClick={() => setOpen(false)}
+                    className="block py-2 text-[40px] font-bold leading-tight tracking-heading"
+                  >
+                    {l.label}
+                  </NavLink>
+                </motion.li>
+              ))}
             </ul>
+            <div className="mt-auto flex flex-col gap-4">
+              <p className="text-[15px] leading-relaxed text-fog">
+                Vendemos somente para empresas com CNPJ. Fale com a equipe comercial pelo WhatsApp {WHATSAPP_DISPLAY}.
+              </p>
+              <a
+                href={waLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={trackConversion}
+                className="flex h-14 items-center justify-center gap-2.5 rounded-full bg-cream text-[15px] font-semibold text-ink"
+              >
+                <WhatsAppGlyph size={20} />
+                Pedir tabela de preços
+              </a>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </>
   )
 }

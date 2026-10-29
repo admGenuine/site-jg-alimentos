@@ -1,33 +1,49 @@
 import type { Config } from 'tailwindcss'
 
+// Tokens visuais inspirados na identidade da Machi:
+// base quase preta, texto creme, azul profundo para seções de marca e cards em tons pastel.
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        primary: '#4F74AD',
-        'primary-container': '#7A9FD4',
-        secondary: '#3A6B50',
-        'secondary-container': '#B8D9C6',
-        surface: '#F5F8FC',
-        'on-surface': '#1A2333',
-        'surface-container-low': '#EBF0F8',
-        outline: '#7A8FA8',
-        'inverse-surface': '#1A2840',
-        'inverse-on-surface': '#E2EAF5',
-      },
-      borderRadius: {
-        DEFAULT: '0.125rem',
-        xl: '0.5rem',
-        '2xl': '1rem',
-        '3xl': '1.5rem',
-        full: '9999px',
+        ink: '#0C0E0F',
+        graphite: '#17191B',
+        line: '#2A2D30',
+        cream: '#F6F1EA',
+        fog: '#A6ABB2',
+        tide: '#0E2A3A',
+        'tide-line': '#1F4157',
+        sky: '#7FD0FB',
+        almond: '#F6E1D0',
+        rose: '#F6DCDD',
+        butter: '#FBEDCB',
+        sage: '#E3EAD2',
+        haze: '#DCE8F1',
+        whatsapp: '#25D366',
       },
       fontFamily: {
-        sans: ['Montserrat', 'sans-serif'],
-        headline: ['Montserrat', 'sans-serif'],
-        body: ['Montserrat', 'sans-serif'],
-        editorial: ['Montserrat', 'sans-serif'],
+        sans: ['"Inter Variable"', 'Inter', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        card: '28px',
+        inner: '20px',
+      },
+      letterSpacing: {
+        display: '-0.04em',
+        heading: '-0.025em',
+      },
+      maxWidth: {
+        site: '1360px',
+      },
+      keyframes: {
+        marquee: {
+          from: { transform: 'translate3d(0,0,0)' },
+          to: { transform: 'translate3d(-50%,0,0)' },
+        },
+      },
+      animation: {
+        marquee: 'marquee 60s linear infinite',
       },
     },
   },

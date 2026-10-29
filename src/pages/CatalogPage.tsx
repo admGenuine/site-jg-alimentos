@@ -1,179 +1,206 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { pageTransition, stagger, fadeUp, scaleIn, viewport } from '../lib/animations'
-import CTASection from '../components/CTASection'
+import { useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import Page from '../components/Page'
+import PillButton from '../components/PillButton'
+import CTABand from '../components/CTABand'
+import { Reveal, TwoLineHeading } from '../components/ui'
+import { categories, categoryMessage, waLink, type Category } from '../lib/site'
 
-type Category = {
-  name: string
-  images: string[]
-  items: string[]
+function Arrow({ dir }: { dir: 'left' | 'right' }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      {dir === 'left' ? <path d="M15 5l-7 7 7 7" /> : <path d="M9 5l7 7-7 7" />}
+    </svg>
+  )
 }
 
-const categories: Category[] = [
-  {
-    name: 'Oleaginosas',
-    images: [
-      '/images/oleaginosas.jpg',
-      '/images/oleaginosas-1.jpg',
-      '/images/oleaginosas-2.jpg',
-      '/images/oleaginosas-3.jpg',
-      '/images/oleaginosas-4.jpg',
-      '/images/oleaginosas-5.jpg',
-      '/images/oleaginosas-6.jpg',
-    ],
-    items: ['Castanha do Pará', 'Castanha de Caju', 'Amêndoa', 'Nozes', 'Avelã', 'Macadâmia', 'Pistache', 'Amendoim'],
-  },
-  {
-    name: 'Frutas Secas',
-    images: ['/images/frutas-secas.jpg', '/images/frutas-secas-2.jpg', '/images/frutas-secas-3.jpg'],
-    items: ['Damasco Seco', 'Tâmara', 'Uva Passa', 'Ameixa Seca', 'Figo Seco', 'Cranberry', 'Mirtilo Seco', 'Manga Seca'],
-  },
-  {
-    name: 'Temperos Naturais',
-    images: ['/images/temperos.jpg', '/images/temperos-2.jpg', '/images/temperos-3.jpg'],
-    items: ['Açafrão', 'Canela em Pó', 'Cominho', 'Páprica Defumada', 'Cúrcuma', 'Pimenta do Reino', 'Noz-moscada', 'Cardamomo'],
-  },
-  {
-    name: 'Sementes',
-    images: ['/images/sementes.jpg'],
-    items: ['Chia', 'Linhaça', 'Semente de Abóbora', 'Semente de Girassol', 'Gergelim', 'Quinoa', 'Amaranto'],
-  },
-  {
-    name: 'Variedades',
-    images: [
-      '/images/variedades-1.jpg',
-      '/images/variedades-2.jpg',
-      '/images/variedades-3.jpg',
-      '/images/variedades-4.jpg',
-      '/images/variedades-5.jpg',
-    ],
-    items: ['Mix de Nuts', 'Granola', 'Trail Mix', 'Mix Tropical', 'Sementes de Abóbora', 'Sementes de Girassol', 'Coco Ralado', 'Goji Berry'],
-  },
-]
-
-function CardImage({ cat }: { cat: Category }) {
-  const [current, setCurrent] = useState(0)
-  const { images } = cat
-  const prev = () => setCurrent((c) => (c - 1 + images.length) % images.length)
-  const next = () => setCurrent((c) => (c + 1) % images.length)
+function Gallery({ c }: { c: Category }) {
+  const [i, setI] = useState(0)
+  const touchX = useRef<number | null>(null)
+  const n = c.images.length
+  const go = (d: number) => setI((v) => (v + d + n) % n)
 
   return (
-    <div className="relative h-44 md:h-52 overflow-hidden group">
-      {images.map((src, i) => (
+    <div
+      className="relative aspect-[4/3] overflow-hidden rounded-inner bg-ink/10 md:aspect-auto md:h-full md:min-h-[420px]"
+      onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+      onTouchEnd={(e) => {
+        if (touchX.current === null) return
+        const dx = e.changedTouches[0].clientX - touchX.current
+        if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1)
+        touchX.current = null
+      }}
+      role="group"
+      aria-roledescription="galeria"
+      aria-label={`Fotos de ${c.name}`}
+    >
+      {c.images.map((src, idx) => (
         <img
           key={src}
           src={src}
-          alt={`${cat.name} ${i + 1}`}
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
-          style={{ opacity: i === current ? 1 : 0 }}
+          alt={`${c.name}, foto ${idx + 1} de ${n}`}
           loading="lazy"
           decoding="async"
+          className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500"
+          style={{ opacity: idx === i ? 1 : 0 }}
+          aria-hidden={idx !== i}
         />
       ))}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-      <h2 className="absolute bottom-4 left-5 text-xl font-bold text-white">{cat.name}</h2>
 
-      <button
-        onClick={prev}
-        className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-        aria-label="Anterior"
-      >
-        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>chevron_left</span>
-      </button>
-      <button
-        onClick={next}
-        className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-        aria-label="Próximo"
-      >
-        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>chevron_right</span>
-      </button>
-
-      <div className="absolute bottom-4 right-4 flex gap-1">
-        {images.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrent(i)}
-            className="w-1.5 h-1.5 rounded-full transition-colors"
-            style={{ background: i === current ? 'white' : 'rgba(255,255,255,0.4)' }}
-            aria-label={`Imagem ${i + 1}`}
-          />
-        ))}
-      </div>
+      {n > 1 && (
+        <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-4">
+          <span className="rounded-full bg-ink/70 px-3 py-1.5 text-[13px] font-medium text-cream backdrop-blur" aria-live="polite">
+            {i + 1} / {n}
+          </span>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => go(-1)}
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-cream text-ink transition-transform hover:scale-105"
+              aria-label="Foto anterior"
+            >
+              <Arrow dir="left" />
+            </button>
+            <button
+              type="button"
+              onClick={() => go(1)}
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-cream text-ink transition-transform hover:scale-105"
+              aria-label="Próxima foto"
+            >
+              <Arrow dir="right" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
-export default function CatalogPage() {
+function CategoryBlock({ c }: { c: Category }) {
   return (
-    <motion.main
-      variants={pageTransition}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
+    <article
+      id={c.slug}
+      className="grid scroll-mt-40 gap-8 rounded-card p-6 text-ink md:grid-cols-[1fr_1.15fr] md:p-10"
+      style={{ background: c.tone }}
+      aria-labelledby={`t-${c.slug}`}
     >
-      <section className="pt-24 md:pt-40 lg:pt-56 pb-10 md:pb-16 bg-surface">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewport}
-            className="text-center mb-10 md:mb-16"
-          >
-            <motion.span
-              variants={fadeUp}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold uppercase tracking-widest mb-4"
-            >
-              <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>menu_book</span>
-              Catálogo de produtos
-            </motion.span>
-            <motion.h1 variants={fadeUp} className="text-4xl lg:text-5xl font-extrabold text-on-surface tracking-tight mb-4">
-              Nosso catálogo completo
-            </motion.h1>
-            <motion.p variants={fadeUp} className="text-base text-on-surface/60 max-w-xl mx-auto">
-              Conheça nossa linha com mais de 300 produtos de alimentos naturais disponíveis para atacado. Entre em contato para tabela de preços e condições especiais.
-            </motion.p>
-          </motion.div>
+      <div className="flex flex-col">
+        <h2 id={`t-${c.slug}`} className="text-[clamp(30px,3.4vw,44px)] font-bold leading-[1.02] tracking-heading">
+          {c.name}
+        </h2>
+        <p className="mt-3 max-w-[440px] text-[16px] leading-[1.6] text-ink/70">{c.description}</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {categories.map((cat) => (
-              <motion.div
-                key={cat.name}
-                variants={scaleIn}
-                initial="hidden"
-                whileInView="visible"
-                viewport={viewport}
-                className="rounded-2xl overflow-hidden bg-white shadow-sm border border-outline/10"
+        <p className="mt-8 text-[13px] font-semibold text-ink/55">Alguns itens da linha</p>
+        <ul className="mt-3 grid grid-cols-1 border-t border-ink/10 sm:grid-cols-2 sm:gap-x-6">
+          {c.items.map((item) => (
+            <li key={item} className="border-b border-ink/10 py-2.5 text-[15px] font-medium">
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 md:mt-auto md:pt-8">
+          <PillButton href={waLink(categoryMessage(c.name))} whatsapp variant="dark">
+            Pedir cotação
+          </PillButton>
+          <span className="text-[13px] text-ink/60">Preços e disponibilidade pelo WhatsApp</span>
+        </div>
+      </div>
+      <Gallery c={c} />
+    </article>
+  )
+}
+
+export default function CatalogPage() {
+  const [params, setParams] = useSearchParams()
+  const reduce = useReducedMotion()
+  const selected = params.get('categoria')
+  const valid = categories.some((c) => c.slug === selected) ? selected : null
+  const visible = valid ? categories.filter((c) => c.slug === valid) : categories
+
+  const choose = (slug: string | null) => {
+    if (slug) setParams({ categoria: slug }, { replace: true })
+    else setParams({}, { replace: true })
+  }
+
+  const chip = (active: boolean) =>
+    `h-11 shrink-0 rounded-full px-5 text-[14px] font-semibold transition-colors duration-200 ${
+      active ? 'bg-cream text-ink' : 'border border-cream/25 text-cream hover:border-cream/60'
+    }`
+
+  return (
+    <Page title="Catálogo">
+      <section className="bg-ink pb-10 pt-[132px] md:pb-14 md:pt-[180px]">
+        <div className="container-site">
+          <Reveal className="flex flex-col gap-6">
+            <TwoLineHeading
+              as="h1"
+              first="Catálogo para revenda,"
+              second="mais de 300 itens no atacado."
+              secondClassName="text-fog"
+              className="text-[clamp(40px,5.6vw,72px)] tracking-display"
+            />
+            <p className="max-w-[560px] text-[17px] leading-[1.6] text-cream/80 md:text-[18px]">
+              Veja algumas das linhas que distribuímos para empresas. A tabela completa, com preços de atacado e
+              disponibilidade, é enviada pelo WhatsApp para o seu CNPJ.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      <div className="sticky top-[72px] z-30 border-y border-line/70 bg-ink/90 backdrop-blur-md md:top-[84px]">
+        <div className="container-site">
+          <div className="-mx-5 flex gap-2 overflow-x-auto px-5 py-3 [scrollbar-width:none] sm:mx-0 sm:px-0" role="toolbar" aria-label="Filtrar por linha">
+            <button type="button" className={chip(!valid)} aria-pressed={!valid} onClick={() => choose(null)}>
+              Todas as linhas
+            </button>
+            {categories.map((c) => (
+              <button
+                key={c.slug}
+                type="button"
+                className={chip(valid === c.slug)}
+                aria-pressed={valid === c.slug}
+                onClick={() => choose(c.slug)}
               >
-                <CardImage cat={cat} />
-                <div className="p-6">
-                  <ul className="grid grid-cols-2 gap-y-2 gap-x-4 list-none m-0 p-0">
-                    {cat.items.map((item) => (
-                      <li key={item} className="flex items-center gap-2 text-sm text-on-surface/70">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <motion.a
-                    href="https://wa.me/5544997030397"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.03, y: -2 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="mt-6 flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white no-underline"
-                    style={{ background: 'linear-gradient(135deg, #4F74AD, #7A9FD4)' }}
-                  >
-                    <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>chat</span>
-                    Solicitar catálogo
-                  </motion.a>
-                </div>
-              </motion.div>
+                {c.name}
+              </button>
             ))}
           </div>
         </div>
+      </div>
+
+      <section className="bg-ink pb-24 pt-8 md:pb-32 md:pt-10" aria-label="Linhas de produtos">
+        <div className="container-site flex flex-col gap-4 md:gap-5">
+          <AnimatePresence mode="popLayout" initial={false}>
+            {visible.map((c) => (
+              <motion.div
+                key={c.slug}
+                layout={!reduce}
+                initial={reduce ? false : { opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <CategoryBlock c={c} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+          {valid && (
+            <div className="pt-4">
+              <PillButton variant="outline" onClick={() => choose(null)}>
+                Ver todas as linhas
+              </PillButton>
+            </div>
+          )}
+        </div>
       </section>
-      <CTASection />
-    </motion.main>
+
+      <CTABand
+        image="/img/temperos.webp"
+        first="Não achou o item?"
+        second="A tabela completa tem mais de 300."
+      />
+    </Page>
   )
 }
