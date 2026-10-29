@@ -1,13 +1,11 @@
 import type { Config } from 'tailwindcss'
 
-// Tokens visuais inspirados na identidade da Machi:
-// base quase preta, texto creme, azul profundo para seções de marca e cards em tons pastel.
+// Tokens visuais: tipografia e cards pastel inspirados na Machi, sobre base clara.
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        // base clara (pedido do cliente) com a tipografia e os pastéis da Machi
         paper: '#FFFFFF',
         shell: '#F3F5F7',
         tint: '#EAF1F8',
