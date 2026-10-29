@@ -23,7 +23,7 @@ function Gallery({ c }: { c: Category }) {
 
   return (
     <div
-      className="relative aspect-[4/3] overflow-hidden rounded-inner bg-ink/10 md:aspect-auto md:h-full md:min-h-[420px]"
+      className="relative aspect-[4/3] overflow-hidden rounded-inner bg-white/40 md:aspect-auto md:h-full md:min-h-[420px]"
       onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
       onTouchEnd={(e) => {
         if (touchX.current === null) return
@@ -50,14 +50,14 @@ function Gallery({ c }: { c: Category }) {
 
       {n > 1 && (
         <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-4">
-          <span className="rounded-full bg-ink/70 px-3 py-1.5 text-[13px] font-medium text-cream backdrop-blur" aria-live="polite">
+          <span className="rounded-full bg-white/90 px-3 py-1.5 text-[13px] font-semibold text-ink backdrop-blur" aria-live="polite">
             {i + 1} / {n}
           </span>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => go(-1)}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-cream text-ink transition-transform hover:scale-105"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-ink transition-transform hover:scale-105"
               aria-label="Foto anterior"
             >
               <Arrow dir="left" />
@@ -65,7 +65,7 @@ function Gallery({ c }: { c: Category }) {
             <button
               type="button"
               onClick={() => go(1)}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-cream text-ink transition-transform hover:scale-105"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-ink transition-transform hover:scale-105"
               aria-label="Próxima foto"
             >
               <Arrow dir="right" />
@@ -126,22 +126,22 @@ export default function CatalogPage() {
 
   const chip = (active: boolean) =>
     `h-11 shrink-0 rounded-full px-5 text-[14px] font-semibold transition-colors duration-200 ${
-      active ? 'bg-cream text-ink' : 'border border-cream/25 text-cream hover:border-cream/60'
+      active ? 'bg-ink text-white' : 'border border-ink/15 text-ink hover:border-ink/50'
     }`
 
   return (
     <Page title="Catálogo">
-      <section className="bg-ink pb-10 pt-[132px] md:pb-14 md:pt-[180px]">
+      <section className="bg-paper pb-10 pt-[124px] md:pb-14 md:pt-[172px]">
         <div className="container-site">
           <Reveal className="flex flex-col gap-6">
             <TwoLineHeading
               as="h1"
               first="Catálogo para revenda,"
               second="mais de 300 itens no atacado."
-              secondClassName="text-fog"
+              secondClassName="text-mute"
               className="text-[clamp(40px,5.6vw,72px)] tracking-display"
             />
-            <p className="max-w-[560px] text-[17px] leading-[1.6] text-cream/80 md:text-[18px]">
+            <p className="max-w-[560px] text-[17px] leading-[1.6] text-mute md:text-[18px]">
               Veja algumas das linhas que distribuímos para empresas. A tabela completa, com preços de atacado e
               disponibilidade, é enviada pelo WhatsApp para o seu CNPJ.
             </p>
@@ -149,7 +149,7 @@ export default function CatalogPage() {
         </div>
       </section>
 
-      <div className="sticky top-[72px] z-30 border-y border-line/70 bg-ink/90 backdrop-blur-md md:top-[84px]">
+      <div className="sticky top-[72px] z-30 border-y border-line bg-paper/90 backdrop-blur-md md:top-[84px]">
         <div className="container-site">
           <div className="-mx-5 flex gap-2 overflow-x-auto px-5 py-3 [scrollbar-width:none] sm:mx-0 sm:px-0" role="toolbar" aria-label="Filtrar por linha">
             <button type="button" className={chip(!valid)} aria-pressed={!valid} onClick={() => choose(null)}>
@@ -170,7 +170,7 @@ export default function CatalogPage() {
         </div>
       </div>
 
-      <section className="bg-ink pb-24 pt-8 md:pb-32 md:pt-10" aria-label="Linhas de produtos">
+      <section className="bg-paper pt-8 md:pt-10" aria-label="Linhas de produtos">
         <div className="container-site flex flex-col gap-4 md:gap-5">
           <AnimatePresence mode="popLayout" initial={false}>
             {visible.map((c) => (

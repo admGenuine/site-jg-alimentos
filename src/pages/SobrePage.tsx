@@ -26,40 +26,44 @@ const values = [
 
 export default function SobrePage() {
   const reduce = useReducedMotion()
+  const fade = (delay: number) =>
+    reduce
+      ? {}
+      : { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.9, ease: EASE, delay } }
+
   return (
     <Page title="Sobre a JG">
-      <section className="relative h-[88svh] min-h-[600px] overflow-hidden bg-tide" aria-label="Sobre a JG Alimentos">
-        <motion.img
-          src="/img/estoque-jg.webp"
-          alt="Estoque da JG Alimentos com prateleiras e pallets de produtos"
-          fetchPriority="high"
-          className="absolute inset-0 h-full w-full object-cover object-[50%_78%]"
-          initial={reduce ? false : { scale: 1.08 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1.8, ease: EASE }}
-        />
-        <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-ink/90 via-ink/50 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-ink via-ink/60 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0">
-          <div className="container-site pb-12 md:pb-16">
-            <motion.h1
-              className="text-[clamp(42px,6.4vw,84px)] font-bold leading-[0.98] tracking-display"
-              initial={reduce ? false : { opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: EASE, delay: 0.2 }}
-            >
-              <span className="block">Mais de 6 anos levando</span>
-              <span className="block">qualidade ao seu negócio.</span>
-            </motion.h1>
-          </div>
+      <section className="bg-paper pb-6 pt-[124px] md:pb-10 md:pt-[172px]" aria-label="Sobre a JG Alimentos">
+        <div className="container-site">
+          <motion.h1
+            className="text-[clamp(40px,6.4vw,84px)] font-bold leading-[0.98] tracking-display"
+            {...fade(0.1)}
+          >
+            <span className="block">Mais de 6 anos levando</span>
+            <span className="block text-mute">qualidade ao seu negócio.</span>
+          </motion.h1>
+          <motion.div
+            className="relative mt-10 aspect-[4/3.4] overflow-hidden rounded-card bg-tint sm:aspect-[16/9] md:mt-14 lg:aspect-[16/7.2]"
+            {...fade(0.35)}
+          >
+            <img
+              src="/img/estoque-jg.webp"
+              alt="Estoque da JG Alimentos com prateleiras e pallets de produtos"
+              fetchPriority="high"
+              className="absolute inset-0 h-full w-full object-cover object-[50%_62%]"
+            />
+          </motion.div>
         </div>
       </section>
 
-      <section className="bg-ink py-24 md:py-32" aria-labelledby="quem-somos">
+      <section className="bg-paper py-20 md:py-28" aria-labelledby="quem-somos">
         <div className="container-site grid gap-12 md:grid-cols-[1fr_0.9fr] md:gap-20">
-          <Reveal className="flex flex-col gap-5 text-[17px] leading-[1.7] text-cream/80 md:text-[18px]">
-            <p className="mb-1 text-[13px] font-semibold uppercase tracking-[0.08em] text-sky">Quem somos</p>
-            <h2 id="quem-somos" className="mb-3 text-[clamp(32px,4vw,48px)] font-bold leading-[1.05] tracking-heading text-cream">
+          <Reveal className="flex flex-col gap-5 text-[17px] leading-[1.7] text-ink/75 md:text-[18px]">
+            <p className="mb-1 text-[13px] font-semibold uppercase tracking-[0.08em] text-brand">Quem somos</p>
+            <h2
+              id="quem-somos"
+              className="mb-3 text-[clamp(32px,4vw,48px)] font-bold leading-[1.05] tracking-heading text-ink"
+            >
               Distribuição atacadista de alimentos naturais.
             </h2>
             <p>
@@ -99,7 +103,7 @@ export default function SobrePage() {
                     suffix={s.suffix}
                     className="block text-[clamp(44px,5vw,64px)] font-bold leading-none tracking-display"
                   />
-                  <span className="mt-3 block text-[15px] text-fog">{s.label}</span>
+                  <span className="mt-3 block text-[15px] text-mute">{s.label}</span>
                 </dd>
               </div>
             ))}
@@ -107,14 +111,14 @@ export default function SobrePage() {
         </div>
       </section>
 
-      <section className="bg-ink pb-24 md:pb-32" aria-labelledby="estrutura">
+      <section className="bg-tint py-20 md:py-28" aria-labelledby="estrutura">
         <div className="container-site">
           <Reveal className="mb-10 md:mb-14">
             <div id="estrutura">
               <TwoLineHeading
                 first="Estrutura própria,"
                 second="de Maringá para o Brasil."
-                secondClassName="text-fog"
+                secondClassName="text-mute"
                 className="text-[clamp(34px,4.6vw,56px)]"
               />
             </div>
@@ -129,7 +133,7 @@ export default function SobrePage() {
                   decoding="async"
                   className="absolute inset-0 h-full w-full object-cover object-[46%_50%]"
                 />
-                <figcaption className="absolute bottom-4 left-4 rounded-full bg-ink/75 px-4 py-2 text-[13px] font-medium backdrop-blur">
+                <figcaption className="absolute bottom-4 left-4 rounded-full bg-white/90 px-4 py-2 text-[13px] font-semibold text-ink backdrop-blur">
                   Nossa fachada em Maringá - PR
                 </figcaption>
               </figure>
@@ -143,27 +147,34 @@ export default function SobrePage() {
                   decoding="async"
                   className="absolute inset-0 h-full w-full object-cover object-[50%_60%]"
                 />
-                <figcaption className="absolute bottom-4 left-4 rounded-full bg-ink/75 px-4 py-2 text-[13px] font-medium backdrop-blur">
+                <figcaption className="absolute bottom-4 left-4 rounded-full bg-white/90 px-4 py-2 text-[13px] font-semibold text-ink backdrop-blur">
                   Estoque por dentro
                 </figcaption>
               </figure>
             </Reveal>
           </div>
+        </div>
+      </section>
 
-          <div className="mt-24 md:mt-32">
-            <Reveal className="mb-10">
-              <h2 className="text-[clamp(30px,3.6vw,44px)] font-bold leading-[1.05] tracking-heading">Nossos valores</h2>
-            </Reveal>
-            <div className="grid gap-4 md:grid-cols-3 md:gap-5">
-              {values.map((v, i) => (
-                <Reveal key={v.title} delay={i * 0.08}>
-                  <div className="flex h-full min-h-[240px] flex-col rounded-card p-7 text-ink md:p-8" style={{ background: v.tone }}>
-                    <h3 className="text-[26px] font-semibold tracking-heading">{v.title}</h3>
-                    <p className="mt-auto pt-10 text-[16px] leading-[1.6] text-ink/75">{v.text}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
+      <section className="bg-paper pt-20 md:pt-28" aria-labelledby="valores">
+        <div className="container-site">
+          <Reveal className="mb-10">
+            <h2 id="valores" className="text-[clamp(30px,3.6vw,44px)] font-bold leading-[1.05] tracking-heading">
+              Nossos valores
+            </h2>
+          </Reveal>
+          <div className="grid gap-4 md:grid-cols-3 md:gap-5">
+            {values.map((v, i) => (
+              <Reveal key={v.title} delay={i * 0.08}>
+                <div
+                  className="flex h-full min-h-[240px] flex-col rounded-card p-7 text-ink md:p-8"
+                  style={{ background: v.tone }}
+                >
+                  <h3 className="text-[26px] font-semibold tracking-heading">{v.title}</h3>
+                  <p className="mt-auto pt-10 text-[16px] leading-[1.6] text-ink/75">{v.text}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>

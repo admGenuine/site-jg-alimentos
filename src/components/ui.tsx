@@ -4,38 +4,6 @@ import { Link } from 'react-router-dom'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-/** Letreiro gigante que corre na horizontal (o "ticker" da Machi). */
-export function Marquee({
-  items,
-  className = '',
-  itemClassName = '',
-  duration = 60,
-}: {
-  items: string[]
-  className?: string
-  itemClassName?: string
-  duration?: number
-}) {
-  const row = (hidden: boolean) => (
-    <div className="flex shrink-0 items-center" aria-hidden={hidden || undefined}>
-      {items.map((t, i) => (
-        <span key={i} className={`flex items-center whitespace-nowrap ${itemClassName}`}>
-          {t}
-          <span className="mx-[0.35em]">•</span>
-        </span>
-      ))}
-    </div>
-  )
-  return (
-    <div className={`pointer-events-none select-none overflow-hidden ${className}`}>
-      <div className="flex w-max animate-marquee" style={{ animationDuration: `${duration}s` }}>
-        {row(false)}
-        {row(true)}
-      </div>
-    </div>
-  )
-}
-
 /** Entrada única por bloco: sobe 24px e aparece. Respeita "reduzir movimento". */
 export function Reveal({
   children,

@@ -50,7 +50,7 @@ export default function Navbar() {
     <>
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300 ${
-          scrolled || open ? 'border-b border-line/70 bg-ink/85 backdrop-blur-md' : 'border-b border-transparent bg-transparent'
+          scrolled || open ? 'border-b border-line bg-paper/90 backdrop-blur-md' : 'border-b border-transparent bg-paper'
         }`}
       >
         <nav className="container-site flex h-[72px] items-center justify-between md:h-[84px]" aria-label="Principal">
@@ -61,8 +61,8 @@ export default function Navbar() {
               <li key={l.label}>
                 <NavLink
                   to={l.to}
-                  className={`text-[14px] font-medium transition-opacity duration-200 hover:opacity-100 ${
-                    isActive(l.to) ? 'opacity-100' : 'opacity-75'
+                  className={`text-[14px] font-medium text-ink transition-opacity duration-200 hover:opacity-100 ${
+                    isActive(l.to) ? 'opacity-100' : 'opacity-60'
                   }`}
                 >
                   {l.label}
@@ -72,25 +72,25 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <PillButton href={waLink()} whatsapp variant="cream" className="hidden !h-11 md:inline-flex">
+            <PillButton href={waLink()} whatsapp variant="dark" className="hidden !h-11 md:inline-flex">
               Pedir tabela de preços
             </PillButton>
             <button
               type="button"
               onClick={() => setOpen((o) => !o)}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-cream/25 md:hidden"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/15 md:hidden"
               aria-label={open ? 'Fechar menu' : 'Abrir menu'}
               aria-expanded={open}
               aria-controls="menu-mobile"
             >
               <span className="relative block h-3 w-5">
                 <span
-                  className={`absolute left-0 top-0 h-[2px] w-5 rounded bg-cream transition-transform duration-300 ${
+                  className={`absolute left-0 top-0 h-[2px] w-5 rounded bg-ink transition-transform duration-300 ${
                     open ? 'translate-y-[5px] rotate-45' : ''
                   }`}
                 />
                 <span
-                  className={`absolute bottom-0 left-0 h-[2px] w-5 rounded bg-cream transition-transform duration-300 ${
+                  className={`absolute bottom-0 left-0 h-[2px] w-5 rounded bg-ink transition-transform duration-300 ${
                     open ? '-translate-y-[5px] -rotate-45' : ''
                   }`}
                 />
@@ -104,7 +104,7 @@ export default function Navbar() {
         {open && (
           <motion.div
             id="menu-mobile"
-            className="fixed inset-0 z-40 flex flex-col bg-ink px-5 pb-8 pt-[96px] md:hidden"
+            className="fixed inset-0 z-40 flex flex-col bg-paper px-5 pb-8 pt-[96px] text-ink md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -129,7 +129,7 @@ export default function Navbar() {
               ))}
             </ul>
             <div className="mt-auto flex flex-col gap-4">
-              <p className="text-[15px] leading-relaxed text-fog">
+              <p className="text-[15px] leading-relaxed text-mute">
                 Vendemos somente para empresas com CNPJ. Fale com a equipe comercial pelo WhatsApp {WHATSAPP_DISPLAY}.
               </p>
               <a
@@ -137,7 +137,7 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={trackConversion}
-                className="flex h-14 items-center justify-center gap-2.5 rounded-full bg-cream text-[15px] font-semibold text-ink"
+                className="flex h-14 items-center justify-center gap-2.5 rounded-full bg-ink text-[15px] font-semibold text-white"
               >
                 <WhatsAppGlyph size={20} />
                 Pedir tabela de preços

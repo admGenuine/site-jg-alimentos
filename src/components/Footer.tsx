@@ -12,6 +12,9 @@ import {
   trackConversion,
 } from '../lib/site'
 
+const inputCls =
+  'h-12 min-w-0 rounded-full border border-line bg-paper px-5 text-[15px] text-ink placeholder:text-mute focus:outline-none focus-visible:ring-2 focus-visible:ring-brand'
+
 function QuoteForm() {
   const [empresa, setEmpresa] = useState('')
   const [cidade, setCidade] = useState('')
@@ -31,10 +34,10 @@ function QuoteForm() {
 
   return (
     <form onSubmit={submit} noValidate className="w-full max-w-md" aria-describedby="form-help">
-      <p id="form-help" className="mb-3 text-[13px] font-medium text-fog">
+      <p id="form-help" className="mb-3 text-[13px] font-medium text-mute">
         Peça a tabela de atacado
       </p>
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-0 sm:rounded-full sm:bg-graphite sm:p-1.5">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-0 sm:rounded-full sm:border sm:border-line sm:bg-paper sm:p-1.5">
         <label className="sr-only" htmlFor="f-empresa">
           Nome da empresa
         </label>
@@ -45,7 +48,7 @@ function QuoteForm() {
           placeholder="Nome da empresa"
           autoComplete="organization"
           aria-invalid={!!error}
-          className="h-12 min-w-0 rounded-full bg-graphite px-5 sm:flex-1 text-[15px] text-cream placeholder:text-fog/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky sm:bg-transparent"
+          className={`${inputCls} sm:flex-1 sm:border-0 sm:bg-transparent`}
         />
         <label className="sr-only" htmlFor="f-cidade">
           Cidade
@@ -56,25 +59,27 @@ function QuoteForm() {
           onChange={(e) => setCidade(e.target.value)}
           placeholder="Cidade"
           autoComplete="address-level2"
-          className="h-12 min-w-0 rounded-full bg-graphite px-5 text-[15px] text-cream placeholder:text-fog/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky sm:w-32 sm:bg-transparent"
+          className={`${inputCls} sm:w-32 sm:rounded-none sm:border-0 sm:border-l sm:bg-transparent`}
         />
-        <PillButton type="submit" variant="cream" className="!h-12 sm:!h-11">
+        <PillButton type="submit" variant="dark" className="!h-12 sm:!h-11">
           Enviar
         </PillButton>
       </div>
       {error && (
-        <p role="alert" className="mt-2 text-[13px] text-rose">
+        <p role="alert" className="mt-2 text-[13px] font-medium text-[#B42318]">
           {error}
         </p>
       )}
-      <p className="mt-2 text-[12px] text-fog/80">Abre o WhatsApp com a mensagem pronta. Atendemos somente empresas.</p>
+      <p className="mt-2 text-[12px] text-mute">Abre o WhatsApp com a mensagem pronta. Atendemos somente empresas.</p>
     </form>
   )
 }
 
+const linkCls = 'transition-colors hover:text-ink'
+
 export default function Footer() {
   return (
-    <footer className="bg-ink pt-20 md:pt-28">
+    <footer className="bg-shell pt-20 text-ink md:pt-28">
       <div className="container-site">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
           <div>
@@ -87,10 +92,10 @@ export default function Footer() {
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-[auto_auto_1fr] sm:gap-14">
             <div>
               <p className="mb-4 text-[20px] font-semibold tracking-heading">Produtos</p>
-              <ul className="flex flex-col gap-2.5 text-[15px] text-cream/80">
+              <ul className="flex flex-col gap-2.5 text-[15px] text-mute">
                 {categories.map((c) => (
                   <li key={c.slug}>
-                    <Link className="hover:text-cream" to={`/catalogo?categoria=${c.slug}`}>
+                    <Link className={linkCls} to={`/catalogo?categoria=${c.slug}`}>
                       {c.name}
                     </Link>
                   </li>
@@ -99,24 +104,24 @@ export default function Footer() {
             </div>
             <div>
               <p className="mb-4 text-[20px] font-semibold tracking-heading">Empresa</p>
-              <ul className="flex flex-col gap-2.5 text-[15px] text-cream/80">
+              <ul className="flex flex-col gap-2.5 text-[15px] text-mute">
                 <li>
-                  <Link className="hover:text-cream" to="/sobre">
+                  <Link className={linkCls} to="/sobre">
                     Sobre a JG
                   </Link>
                 </li>
                 <li>
-                  <Link className="hover:text-cream" to="/catalogo">
+                  <Link className={linkCls} to="/catalogo">
                     Catálogo
                   </Link>
                 </li>
                 <li>
-                  <Link className="hover:text-cream" to="/#como-comprar">
+                  <Link className={linkCls} to="/#como-comprar">
                     Como comprar
                   </Link>
                 </li>
                 <li>
-                  <a className="hover:text-cream" href={INSTAGRAM} target="_blank" rel="noopener noreferrer">
+                  <a className={linkCls} href={INSTAGRAM} target="_blank" rel="noopener noreferrer">
                     Instagram
                   </a>
                 </li>
@@ -124,14 +129,20 @@ export default function Footer() {
             </div>
             <div className="col-span-2 sm:col-span-1">
               <p className="mb-4 text-[20px] font-semibold tracking-heading">Contato</p>
-              <ul className="flex flex-col gap-2.5 text-[15px] text-cream/80">
+              <ul className="flex flex-col gap-2.5 text-[15px] text-mute">
                 <li>
-                  <a className="whitespace-nowrap hover:text-cream" href={waLink()} target="_blank" rel="noopener noreferrer" onClick={trackConversion}>
+                  <a
+                    className={`whitespace-nowrap ${linkCls}`}
+                    href={waLink()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={trackConversion}
+                  >
                     WhatsApp {WHATSAPP_DISPLAY}
                   </a>
                 </li>
                 <li>
-                  <a className="hover:text-cream" href={`mailto:${EMAIL}`}>
+                  <a className={linkCls} href={`mailto:${EMAIL}`}>
                     {EMAIL}
                   </a>
                 </li>
@@ -144,12 +155,12 @@ export default function Footer() {
 
       {/* Marca gigante, como o "machi" no rodapé de referência */}
       <div className="container-site mt-16 pb-[2vw] md:mt-24" aria-hidden="true">
-        <p className="whitespace-nowrap text-center text-[16.5vw] font-bold leading-[0.95] tracking-[-0.06em] text-cream min-[1360px]:text-[224px]">
+        <p className="whitespace-nowrap text-center text-[16.5vw] font-bold leading-[0.95] tracking-[-0.06em] text-ink min-[1360px]:text-[224px]">
           jg alimentos
         </p>
       </div>
 
-      <div className="container-site flex flex-col gap-2 py-8 text-[13px] text-fog sm:flex-row sm:items-center sm:justify-between">
+      <div className="container-site flex flex-col gap-2 border-t border-line py-8 text-[13px] text-mute sm:flex-row sm:items-center sm:justify-between">
         <p>© {new Date().getFullYear()} JG Alimentos. Todos os direitos reservados.</p>
         <p>CNPJ {CNPJ}. Venda exclusiva para pessoa jurídica.</p>
       </div>

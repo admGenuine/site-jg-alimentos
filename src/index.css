@@ -13,8 +13,8 @@
   body {
     margin: 0;
     font-family: 'Inter Variable', 'Inter', system-ui, sans-serif;
-    background-color: #0c0e0f;
-    color: #f6f1ea;
+    background-color: #ffffff;
+    color: #0c0e0f;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -32,13 +32,13 @@
     max-width: 100%;
   }
   :focus-visible {
-    outline: 2px solid #7fd0fb;
+    outline: 2px solid #2f62a8;
     outline-offset: 3px;
     border-radius: 6px;
   }
   ::selection {
-    background: #7fd0fb;
-    color: #0c0e0f;
+    background: #2f62a8;
+    color: #ffffff;
   }
   h1,
   h2,
@@ -84,8 +84,5 @@
   }
   .roll > span {
     transition: none;
-  }
-  .animate-marquee {
-    animation: none !important;
   }
 }

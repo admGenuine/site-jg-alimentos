@@ -16,7 +16,7 @@ export default function WhatsAppButton() {
       transition={{ delay: 1.2, type: 'spring', stiffness: 260, damping: 20 }}
       whileHover={{ scale: 1.06 }}
       whileTap={{ scale: 0.95 }}
-      className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-whatsapp text-white shadow-[0_10px_30px_rgba(0,0,0,0.35)] md:bottom-7 md:right-7 md:h-16 md:w-16"
+      className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-whatsapp text-white shadow-[0_10px_28px_rgba(12,14,15,0.18)] md:bottom-7 md:right-7 md:h-16 md:w-16"
       aria-label="Falar com a JG no WhatsApp"
     >
       <WhatsAppGlyph size={30} />

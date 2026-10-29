@@ -2,13 +2,13 @@ import { Link } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import { trackConversion } from '../lib/site'
 
-type Variant = 'dark' | 'cream' | 'outline' | 'outline-dark'
+type Variant = 'dark' | 'light' | 'outline' | 'outline-light'
 
 const styles: Record<Variant, string> = {
-  dark: 'bg-ink text-cream hover:bg-black',
-  cream: 'bg-cream text-ink hover:bg-white',
-  outline: 'border border-cream/30 text-cream hover:border-cream/70',
-  'outline-dark': 'border border-ink/20 text-ink hover:border-ink/60',
+  dark: 'bg-ink text-white hover:bg-black',
+  light: 'bg-white text-ink hover:bg-cream',
+  outline: 'border border-ink/15 text-ink hover:border-ink/50',
+  'outline-light': 'border border-white/40 text-white hover:border-white/80',
 }
 
 type Props = {

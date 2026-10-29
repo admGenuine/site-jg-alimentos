@@ -7,14 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
+        // base clara (pedido do cliente) com a tipografia e os pastéis da Machi
+        paper: '#FFFFFF',
+        shell: '#F3F5F7',
+        tint: '#EAF1F8',
         ink: '#0C0E0F',
-        graphite: '#17191B',
-        line: '#2A2D30',
+        mute: '#5D636A',
+        line: '#E3E6EA',
+        brand: '#2F62A8',
         cream: '#F6F1EA',
-        fog: '#A6ABB2',
-        tide: '#0E2A3A',
-        'tide-line': '#1F4157',
-        sky: '#7FD0FB',
         almond: '#F6E1D0',
         rose: '#F6DCDD',
         butter: '#FBEDCB',
@@ -35,15 +36,6 @@ export default {
       },
       maxWidth: {
         site: '1360px',
-      },
-      keyframes: {
-        marquee: {
-          from: { transform: 'translate3d(0,0,0)' },
-          to: { transform: 'translate3d(-50%,0,0)' },
-        },
-      },
-      animation: {
-        marquee: 'marquee 60s linear infinite',
       },
     },
   },

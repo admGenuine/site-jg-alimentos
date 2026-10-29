@@ -13,7 +13,7 @@ export default function Story() {
   const textY = useTransform(scrollYProgress, [0, 1], [40, 0])
 
   return (
-    <section className="bg-tide py-16 md:py-24" aria-labelledby="historia">
+    <section className="bg-tint py-16 md:py-24" aria-labelledby="historia">
       <div className="container-site">
         <motion.div
           ref={cardRef}
@@ -31,7 +31,7 @@ export default function Story() {
           <motion.p
             style={reduce ? undefined : { y: textY }}
             aria-hidden="true"
-            className="absolute inset-x-0 bottom-[5%] px-4 text-center whitespace-nowrap text-[clamp(40px,10.5vw,160px)] font-bold leading-none tracking-[-0.055em] text-cream/95"
+            className="absolute inset-x-0 bottom-[5%] px-4 text-center whitespace-nowrap text-[clamp(40px,10.5vw,160px)] font-bold leading-none tracking-[-0.055em] text-white"
           >
             estoque próprio
           </motion.p>
@@ -39,7 +39,7 @@ export default function Story() {
 
         <div className="mt-20 grid gap-10 md:mt-28 md:grid-cols-2 md:gap-16">
           <Reveal>
-            <p className="mb-5 text-[13px] font-semibold uppercase tracking-[0.08em] text-sky">Sobre a JG</p>
+            <p className="mb-5 text-[13px] font-semibold uppercase tracking-[0.08em] text-brand">Sobre a JG</p>
             <div id="historia">
               <TwoLineHeading
                 first="Mais de 6 anos,"
@@ -48,7 +48,7 @@ export default function Story() {
               />
             </div>
           </Reveal>
-          <Reveal delay={0.1} className="flex flex-col justify-end gap-4 text-[17px] leading-[1.65] text-cream/80">
+          <Reveal delay={0.1} className="flex flex-col justify-end gap-4 text-[17px] leading-[1.65] text-ink/75">
             <p>
               A JG Alimentos nasceu da vontade de levar alimentos naturais de qualidade para comerciantes de todo o
               Brasil. Somos especializados na distribuição atacadista de oleaginosas, frutas secas, temperos e
@@ -61,9 +61,9 @@ export default function Story() {
           </Reveal>
         </div>
 
-        <dl className="mt-16 grid grid-cols-1 border-t border-tide-line sm:grid-cols-3 md:mt-20">
+        <dl className="mt-16 grid grid-cols-1 border-t border-ink/10 sm:grid-cols-3 md:mt-20">
           {stats.map((s) => (
-            <div key={s.label} className="border-b border-tide-line py-8 sm:border-b-0 sm:pr-6">
+            <div key={s.label} className="border-b border-ink/10 py-8 sm:border-b-0 sm:pr-6">
               <dt className="sr-only">{s.label}</dt>
               <dd>
                 <CountUp
@@ -71,14 +71,14 @@ export default function Story() {
                   suffix={s.suffix}
                   className="block text-[clamp(44px,5vw,64px)] font-bold leading-none tracking-display"
                 />
-                <span className="mt-3 block text-[15px] text-cream/70">{s.label}</span>
+                <span className="mt-3 block text-[15px] text-mute">{s.label}</span>
               </dd>
             </div>
           ))}
         </dl>
 
         <div className="mt-6 md:mt-10">
-          <PillButton to="/sobre" variant="cream">
+          <PillButton to="/sobre" variant="dark">
             Conhecer a JG
           </PillButton>
         </div>

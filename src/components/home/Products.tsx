@@ -47,7 +47,7 @@ export default function Products() {
   const last = categories[categories.length - 1]
   const rest = categories.slice(0, -1)
   return (
-    <section id="produtos" className="scroll-mt-20 bg-ink pb-24 md:pb-32" aria-labelledby="produtos-titulo">
+    <section id="produtos" className="scroll-mt-20 bg-paper pb-24 md:pb-32" aria-labelledby="produtos-titulo">
       <div className="container-site">
         <Reveal className="mb-10 flex flex-col gap-6 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div id="produtos-titulo">
